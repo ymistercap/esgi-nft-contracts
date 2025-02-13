@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.13;
+pragma solidity ^0.8.13;
 
-import "openzeppelin-contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "openzeppelin-contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract ESGINFT is ERC721URIStorage, Ownable {
     uint256 public tokenCounter;
@@ -19,8 +19,12 @@ contract ESGINFT is ERC721URIStorage, Ownable {
     event NFTUpdated(uint256 indexed tokenId, string newMetadataUri);
     event NFTRevoked(uint256 indexed tokenId);
 
-    constructor() ERC721("ESGI NFT", "ESGINFT") {
+    constructor() ERC721("ESGI NFT", "ESGINFT") Ownable(msg.sender) {
         tokenCounter = 0;
+    }
+
+    function _exists(uint256 tokenId) internal view returns (bool) {
+        return _ownerOf(tokenId) != address(0);
     }
 
     /// @notice Crée un nouveau NFT et l’assigne à l’adresse donnée

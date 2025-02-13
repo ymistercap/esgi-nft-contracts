@@ -12,23 +12,27 @@ contract ESGINFTTest is Test {
     }
 
     function testCreateNFT() public {
-        uint256 tokenId = nft.createNFT(address(this), "ipfs://exampleCID");
+        address recipient = address(0x1);
+        uint256 tokenId = nft.createNFT(recipient, "ipfs://exampleCID");
         assertEq(tokenId, 0);
         (ESGINFT.Status status, ) = nft.nftData(tokenId);
         assertEq(uint(status), uint(ESGINFT.Status.Active));
     }
 
     function testUpdateNFT() public {
-        uint256 tokenId = nft.createNFT(address(this), "ipfs://oldCID");
+        address recipient = address(0x1);
+        uint256 tokenId = nft.createNFT(recipient, "ipfs://oldCID");
         nft.updateNFT(tokenId, "ipfs://newCID");
         (, string memory uri) = nft.nftData(tokenId);
         assertEq(uri, "ipfs://newCID");
     }
 
     function testRevokeNFT() public {
-        uint256 tokenId = nft.createNFT(address(this), "ipfs://exampleCID");
+        address recipient = address(0x1);
+        uint256 tokenId = nft.createNFT(recipient, "ipfs://exampleCID");
         nft.revokeNFT(tokenId);
         (ESGINFT.Status status, ) = nft.nftData(tokenId);
         assertEq(uint(status), uint(ESGINFT.Status.Revoked));
     }
+
 }
