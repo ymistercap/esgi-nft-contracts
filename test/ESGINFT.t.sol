@@ -4,6 +4,10 @@ pragma solidity ^0.8.13;
 import "forge-std/Test.sol";
 import "../src/ESGINFT.sol";
 
+/**
+ * @title ESGINFTTest
+ * @notice Tests unitaires de base pour valider les fonctions principales du smart contract ESGINFT.
+ */
 contract ESGINFTTest is Test {
     ESGINFT public nft;
 
@@ -14,9 +18,11 @@ contract ESGINFTTest is Test {
     function testCreateNFT() public {
         address recipient = address(0x1);
         uint256 tokenId = nft.createNFT(recipient, "ipfs://exampleCID");
+        // Le premier tokenId doit être 0
         assertEq(tokenId, 0);
-        (ESGINFT.Status status, ) = nft.nftData(tokenId);
+        (ESGINFT.Status status, string memory uri) = nft.nftData(tokenId);
         assertEq(uint(status), uint(ESGINFT.Status.Active));
+        assertEq(uri, "ipfs://exampleCID");
     }
 
     function testUpdateNFT() public {
@@ -34,5 +40,4 @@ contract ESGINFTTest is Test {
         (ESGINFT.Status status, ) = nft.nftData(tokenId);
         assertEq(uint(status), uint(ESGINFT.Status.Revoked));
     }
-
 }
